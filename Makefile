@@ -1,20 +1,20 @@
-CC = clang++
+CC = clang
 EXEC = main
 
 SRC_DIR = ./src
 BUILD_DIR = ./build
 INCLUDE_DIR = ./include
 
-SRCS = $(shell find $(SRC_DIR) -name '*.cpp')
-OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))
+SRCS = $(shell find $(SRC_DIR) -name '*.c')
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
-CFLAGS = -Wall -Werror -Wconversion -std=c++20 -g  -I$(INCLUDE_DIR)
+CFLAGS = -Wall -Werror -Wconversion -std=c11 -g  -I$(INCLUDE_DIR)
 LIBS = -ldl
 
 $(EXEC): $(OBJS)
 	$(CC) -o $@ $^ $(LIBS)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 clean:
