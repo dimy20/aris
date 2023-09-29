@@ -2,3 +2,9 @@
 compile_commands.json
 build
 main
+TODO
+include/glad
+include/KHR
+src/glad.cpp
+include/stb_image.h
+src/stb_image.cpp
