@@ -5,6 +5,7 @@
 #define MAX_KEYBOARD_KEYS_NUM 1024
 
 #include "shader.h"
+#include "chunk.h"
 
 enum GameState {
     GAME_ACTIVE,
@@ -28,4 +29,5 @@ struct Game{
 
     Shader m_screen_shader;
     glm::mat4 mProj;
+    Chunk mChunk;
 };

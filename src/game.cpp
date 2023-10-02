@@ -5,8 +5,12 @@
 
 #include "game.h"
 #include "triangle.h"
+#include "chunk.h"
 
 Triangle t;
+
+bool prepare_cube();
+bool draw_cube(Shader& shader, const glm::mat4& proj);
 
 Game::Game(uint32_t width, uint32_t height)
     : m_width(width),
@@ -26,11 +30,20 @@ bool Game::init(){
     r.mRads = glm::radians(-85.0f);
     r.mAxis = glm::vec3(1.0, 0.0, 0.0);
 
+    if(!prepare_cube()) return false;
+
+    if(!mChunk.init()){
+        return false;
+    }
+    //mChunk.update();
+
     return true;
 };
 
 bool Game::draw(){
-    if(!t.draw(m_screen_shader, mProj)) return false;
+     if(!mChunk.render(m_screen_shader, mProj)) return false;
+    //if(!draw_cube(m_screen_shader, mProj)) return false;
+    //if(!t.draw(m_screen_shader, mProj)) return false;
     return true;
 };
 

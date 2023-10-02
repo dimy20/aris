@@ -1,6 +1,5 @@
 #version 410 core
 
-in vec3 position;
 out vec4 frag_color;
 
 void main(){
