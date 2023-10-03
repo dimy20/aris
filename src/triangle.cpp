@@ -2,10 +2,9 @@
 #include <cstdio>
 #include <glad/glad.h>
 
-// this is a temporary view matrix
 glm::mat4 getViewMatrix(){
     glm::mat4 view(1.0);
-    view = glm::translate(view, glm::vec3(0.0, -0.2, -2.0));
+    view = glm::translate(view, glm::vec3(0.0, -0, -2.0));
     return view;
 }
 
@@ -42,9 +41,8 @@ bool Triangle::draw(Shader& shader, const glm::mat4& proj){
     glBindVertexArray(mVao);
     shader.use();
 
-    shader.set_mat4("view", getViewMatrix());
-    shader.set_mat4("model", mTransform.getModelMatrix());
-    shader.set_mat4("proj", proj);
+    glm::mat4 MVP = proj * getViewMatrix() * mTransform.getModelMatrix();
+    shader.set_mat4("MVP", MVP);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);

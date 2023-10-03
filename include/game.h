@@ -27,7 +27,7 @@ struct Game{
     uint32_t m_width;
     uint32_t m_height;
 
-    Shader m_screen_shader;
+    Shader mScreenShader;
     glm::mat4 mProj;
-    Chunk mChunk;
+    Chunk m_chunk;
 };
