@@ -1,8 +1,7 @@
 #pragma once
 
 #include <cstdint>
-
-#define MAX_KEYBOARD_KEYS_NUM 1024
+#include <GLFW/glfw3.h>
 
 #include "shader.h"
 #include "chunk.h"
@@ -23,7 +22,6 @@ struct Game{
     bool draw();
 
     GameState m_state;
-    bool m_keys[MAX_KEYBOARD_KEYS_NUM];
     uint32_t m_width;
     uint32_t m_height;
 
