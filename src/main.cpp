@@ -4,14 +4,20 @@
 #include <glm/glm.hpp>
 
 #include "game.h"
+#include "input.h"
 
 #define SCREEN_W 1024
 #define SCREEN_H 768
+
 
 #define LOG_ERR(s) fprintf(stderr, "Error: %s\n", s);
 
 GLFWwindow* window;
 bool running = true;
+float delta_time;
+float prev_time;
+
+static void update_time();
 
 static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -50,13 +56,19 @@ static bool init_glfw_and_opengl(){
 
     glViewport(0, 0, SCREEN_W, SCREEN_H);
     glDebugMessageCallback(gl_debug_callback, NULL);
-    //glEnable(GL_DEPTH_TEST);
 
-    //glfwSetKeyCallback(window, Input::key_callback);
-    //glfwSetFramebufferSizeCallback(window, Input::framebuffer_size_callback);
-    //glfwSetCursorPosCallback(window, Input::cursor_position_callback);
+    glfwSetKeyCallback(window, Input::key_callback);
+    glfwSetCursorPosCallback(window, Input::cursor_position_callback);
+    glfwSetFramebufferSizeCallback(window, Input::framebuffer_size_callback);
+
+    glEnable(GL_DEPTH_TEST);
 
     return true;
+};
+
+void clear(){
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 };
 
 int main(){
@@ -69,15 +81,31 @@ int main(){
         exit(1);
     }
 
+    prev_time = glfwGetTime();
+
     while(!glfwWindowShouldClose(window)){
+        update_time();
+
         glfwPollEvents();
+
+        game.process_input(delta_time);
+
+        clear();
+
         if(!game.draw()){
             break;
         }
+
         glfwSwapBuffers(window);
     };
 
     glfwTerminate();
 
     return 0;
+};
+
+void update_time(){
+    float curr_time = glfwGetTime();
+    delta_time = curr_time - prev_time;
+    prev_time = curr_time;
 };

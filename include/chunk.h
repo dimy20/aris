@@ -26,7 +26,7 @@ struct Chunk{
     Chunk();
     ~Chunk();
 
-    bool draw(Shader& shader, const glm::mat4& proj);
+    bool draw(Shader& shader, const glm::mat4& vp);
     bool prepare_blocks();
     private:
         bool load_block_vertex_data();

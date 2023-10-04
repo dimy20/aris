@@ -33,8 +33,7 @@ static glm::vec3 block_data[] = {
     glm::vec3(1, 1, -1),
     glm::vec3(-1, 1, -1),
     glm::vec3(-1, -1, 1),
-    glm::vec3(1, -1, 1),
-    glm::vec3(1, 1, 1),
+    glm::vec3(1, -1, 1), glm::vec3(1, 1, 1),
     glm::vec3(-1, 1, 1)
 };
 
@@ -123,15 +122,12 @@ Chunk::~Chunk(){
     //glDeleteVertexArrays(1, &m_vao);
 }
 
-bool Chunk::draw(Shader& shader, const glm::mat4& proj){
+bool Chunk::draw(Shader& shader, const glm::mat4& vp){
     glBindVertexArray(m_vao);
     shader.use();
 
-    glm::mat4 view(1.0), model(1.0);
-    view = glm::translate(view, glm::vec3(0.0, -0.0, -7.0));
-    view = glm::rotate(view, glm::radians(20.0f), glm::vec3(1.0, 0.0, 0.0));
-
-    shader.set_mat4("MVP", proj * view * model);
+    glm::mat4 model(1.0);
+    shader.set_mat4("MVP", vp * model);
 
     size_t num_instances = m_instance_positions.size();
 

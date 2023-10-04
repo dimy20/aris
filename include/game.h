@@ -5,6 +5,7 @@
 
 #include "shader.h"
 #include "chunk.h"
+#include "camera.h"
 
 enum GameState {
     GAME_ACTIVE,
@@ -17,7 +18,7 @@ struct Game{
     ~Game();
 
     bool init();
-    void process_input();
+    void process_input(float delta);
     void update();
     bool draw();
 
@@ -28,4 +29,9 @@ struct Game{
     Shader mScreenShader;
     glm::mat4 mProj;
     Chunk m_chunk;
+    Camera m_camera;
+    bool m_first_mouse;
+
+    float m_prev_mouse_x;
+    float m_prev_mouse_y;
 };

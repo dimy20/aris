@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <iostream>
 #include <vector>
+#include "input.h"
 
 struct Square{
     uint32_t mVao, mVbo, mEbo;
@@ -149,10 +150,12 @@ bool square_init(){
 
 Game::Game(uint32_t width, uint32_t height)
     : m_width(width),
-    m_height(height)
+    m_height(height),
+    m_camera(glm::vec3(0.0, 0.0, 10.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, -1.0))
 {
     float aspect = static_cast<float>(width) / static_cast<float>(height);
     mProj = glm::perspective(45.0f, aspect, 0.1f, 100.0f);
+    m_first_mouse = true;
 };
 
 bool Game::init(){
@@ -167,10 +170,35 @@ bool Game::draw(){
         fprintf(stderr, "Failed to prepare blocks!\n");
         return false;
     }
-    if(!m_chunk.draw(mScreenShader, mProj)){
+
+    glm::mat4 view(1.0);
+    view = glm::translate(view, glm::vec3(0.0, 0.0, -10.0));
+    view = glm::rotate(view, glm::radians(-20.0f), glm::vec3(1.0, 0.0, 0.0));
+
+    if(!m_chunk.draw(mScreenShader, mProj * m_camera.view_matrix())){
         return false;
     }
     return true;
 };
 
 Game::~Game() {};
+
+void Game::process_input(float delta_time){
+    m_camera.keypress_update(delta_time);
+
+    if(m_first_mouse){
+        m_prev_mouse_x = Input::get_mouse_x();
+        m_prev_mouse_y = Input::get_mouse_y();
+        m_first_mouse = false;
+    }
+
+    float x_offset = (Input::get_mouse_x() - m_prev_mouse_x);
+    float y_offset = (m_prev_mouse_y - Input::get_mouse_y());
+
+    m_prev_mouse_x = Input::get_mouse_x();
+    m_prev_mouse_y = Input::get_mouse_y();
+
+    if(Input::is_key_pressed(Input::Key::SHIFT)){
+        m_camera.mousemove_update(x_offset, y_offset);
+    }
+};
